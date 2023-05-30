@@ -2,10 +2,8 @@ package com.solovev.util;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.IntStream;
@@ -37,11 +35,11 @@ public class BernoulliGenerator {
                         .divide(new BigDecimal(n - k + 1));
 
         //number calc
-        Function<Integer,BigDecimal> bernoulliNumber = (n) ->
-                coef.apply(n,n-1).multiply(resultList.peekLast());
+        Function<Integer, BigDecimal> bernoulliNumber = (n) ->
+                coef.apply(n, n - 1).multiply(resultList.peekLast());
 
         //fill list
-        IntStream.rangeClosed(0,finishIndex).forEach(i -> resultList.add(bernoulliNumber.apply(i)));
+        IntStream.rangeClosed(0, finishIndex).forEach(i -> resultList.add(bernoulliNumber.apply(i)));
         return resultList;
     }
 
@@ -57,6 +55,7 @@ public class BernoulliGenerator {
         if (startIndex < 0 || finishIndex < 0) {
             throw new IllegalArgumentException();
         }
+        return null;
     }
 
     /**
@@ -78,3 +77,4 @@ public class BernoulliGenerator {
         }
         return result;
     }
+}
