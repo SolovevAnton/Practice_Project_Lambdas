@@ -1,13 +1,13 @@
 package com.solovev;
 
+import com.solovev.util.BernoulliGenerator;
 import com.solovev.util.Filter;
-import com.solovev.util.FilterOnlyPositive;
 
 import java.lang.reflect.Array;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
 public class Main {
 
@@ -42,7 +42,7 @@ public class Main {
         Double[] arrDouble = {-Math.PI, -Math.E, -1.0, -0.5, 0.0, 1.0, 1.0/6 , 1.1, 2.2, 3.0, 4.0};
 
         //Test 1a
-        print(filter(arrInt, new FilterOnlyPositive()));
+//        print(filter(arrInt, new FilterOnlyPositive()));
         //Test 1b
 //        Scanner scan = new Scanner(System.in);
 //        System.out.print("Input integer: ");
@@ -54,10 +54,17 @@ public class Main {
 //            }
 //        };
 //        print(filter(arrInt, matchInput));
-//        //Test3
+//        //Test1c
 //        print(filter(arrInt, (Integer i) -> i % 2 == 0));
 
-        //Test4
+        //Test2
+        //bernoulli tests
+        int scale = 10;
+        System.out.println(BernoulliGenerator.numberList(0,scale));
+        System.out.println(BernoulliGenerator.numberList(1,scale));
+        System.out.println(BernoulliGenerator.numberList(3,scale));
+        System.out.println(BernoulliGenerator.numberList(4,scale));
+        System.out.println(BernoulliGenerator.numberList(5,scale));
 
     }
 }

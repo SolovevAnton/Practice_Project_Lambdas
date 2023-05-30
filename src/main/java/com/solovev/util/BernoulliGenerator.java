@@ -2,7 +2,8 @@ package com.solovev.util;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.LinkedList;
+import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -17,29 +18,45 @@ public class BernoulliGenerator {
      * @return List of bernoulli numbers
      * @throws IllegalArgumentException if finish < 0
      */
-    static List<BigDecimal> numberSet(int finishIndex) {
+    public static List<BigDecimal> numberList(int finishIndex, int scale) {
         if (finishIndex < 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("finish index must > 0");
         }
-        LinkedList<BigDecimal> resultList = new LinkedList<>();
-        resultList.add(BigDecimal.ONE);
+        List<BigDecimal> resultList = new ArrayList<>(finishIndex + 1);
 
         BiFunction<Integer, Integer, BigDecimal> binomCoef = (n, k) ->
                 new BigDecimal(factorial(BigInteger.valueOf(n)))
                         .divide(
-                                new BigDecimal(factorial(BigInteger.valueOf(k)).multiply(BigInteger.valueOf(n - k)))
+                                new BigDecimal(
+                                        factorial(BigInteger.valueOf(k))
+                                                .multiply(factorial(BigInteger.valueOf(n - k)))),
+                                scale,
+                                RoundingMode.HALF_EVEN
                         );
 
         BiFunction<Integer, Integer, BigDecimal> coef = (n, k) ->
                 binomCoef.apply(n, k)
-                        .divide(new BigDecimal(n - k + 1));
+                        .divide(new BigDecimal(n - k + 1), scale, RoundingMode.HALF_EVEN);
 
         //number calc
-        Function<Integer, BigDecimal> bernoulliNumber = (n) ->
-                coef.apply(n, n - 1).multiply(resultList.peekLast());
+        Function<Integer, BigDecimal> bernoulliNumber = (n) -> {
+            //line added for more precision, but will work without it
+            if (n > 1 && n % 2 != 0) {
+                return BigDecimal.ZERO;
+            }
+
+            BigDecimal sum = new BigDecimal(0);
+            for (int i = 0; i < n; i++) {
+                sum = sum.add(coef.apply(n, i).multiply(resultList.get(i)));
+            }
+            return BigDecimal.ONE.subtract(sum);
+        };
 
         //fill list
-        IntStream.rangeClosed(0, finishIndex).forEach(i -> resultList.add(bernoulliNumber.apply(i)));
+        IntStream
+                .rangeClosed(0, finishIndex)
+                .forEach(i -> resultList.add(bernoulliNumber.apply(i)));
+
         return resultList;
     }
 
@@ -51,7 +68,7 @@ public class BernoulliGenerator {
      * @return
      * @throws IllegalArgumentException if start < 0 or finish < 0
      */
-    static List<BigDecimal> numberSet(int startIndex, int finishIndex) {
+    public List<BigDecimal> numberList(int startIndex, int finishIndex, int scale) {
         if (startIndex < 0 || finishIndex < 0) {
             throw new IllegalArgumentException();
         }
@@ -65,7 +82,7 @@ public class BernoulliGenerator {
      * @return factorial of this BigInt
      * @throws IllegalArgumentException in value is less than 0
      */
-    public static BigInteger factorial(BigInteger n) {
+    private static BigInteger factorial(BigInteger n) {
         if (n.compareTo(BigInteger.ZERO) < 0) {
             throw new IllegalArgumentException("factorial can be count only for a positive number");
         }
