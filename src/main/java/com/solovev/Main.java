@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
+
     /**
      * Method to filter array based on the given Filter realisation
      *
@@ -37,21 +38,26 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        Integer[] arr = {-1, -2, -3, -4, -5, -5, 0, 1, 1, 2, 3, 4, 5};
+        Integer[] arrInt = {-1, -2, -3, -4, -5, -5, 0, 1, 1, 2, 3, 4, 5};
+        Double[] arrDouble = {-Math.PI, -Math.E, -1.0, -0.5, 0.0, 1.0, 1.0/6 , 1.1, 2.2, 3.0, 4.0};
+
         //Test 1a
-        print(filter(arr, new FilterOnlyPositive()));
+        print(filter(arrInt, new FilterOnlyPositive()));
         //Test 1b
-        Scanner scan = new Scanner(System.in);
-        System.out.print("Input integer: ");
-        int number = scan.nextInt();
-        Filter<Integer> matchInput = new Filter<>() {
-            @Override
-            public boolean apply(Integer elem) {
-                return elem == number;
-            }
-        };
-        print(filter(arr, matchInput));
-        //Test3
-        print(filter(arr, (Integer i) -> i % 2 == 0));
+//        Scanner scan = new Scanner(System.in);
+//        System.out.print("Input integer: ");
+//        int number = scan.nextInt();
+//        Filter<Integer> matchInput = new Filter<>() {
+//            @Override
+//            public boolean apply(Integer elem) {
+//                return elem == number;
+//            }
+//        };
+//        print(filter(arrInt, matchInput));
+//        //Test3
+//        print(filter(arrInt, (Integer i) -> i % 2 == 0));
+
+        //Test4
+
     }
 }
