@@ -52,7 +52,7 @@ public class BernoulliGenerator {
             return BigDecimal.ONE.subtract(sum);
         };
 
-        //fill list
+        //TODO refactor fill list
         IntStream
                 .rangeClosed(0, finishIndex)
                 .forEach(i -> resultList.add(bernoulliNumber.apply(i)));
@@ -65,14 +65,19 @@ public class BernoulliGenerator {
      *
      * @param startIndex  index to start number to finish must be > 0
      * @param finishIndex index of bernoulli number to finish must be > 0
-     * @return
+     * @return list of bernoulli numbers from start to finish indexes including
      * @throws IllegalArgumentException if start < 0 or finish < 0
      */
-    public List<BigDecimal> numberList(int startIndex, int finishIndex, int scale) {
-        if (startIndex < 0 || finishIndex < 0) {
-            throw new IllegalArgumentException();
+    public static List<BigDecimal> numberList(int startIndex, int finishIndex, int scale) {
+        if (startIndex < 0) {
+            throw new IllegalArgumentException("start index must > 0");
         }
-        return null;
+
+        //ToDo refactor steam
+        return numberList(finishIndex, scale)
+                .stream()
+                .skip(startIndex)
+                .toList();
     }
 
     /**

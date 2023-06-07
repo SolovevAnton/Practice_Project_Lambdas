@@ -4,10 +4,12 @@ import com.solovev.util.BernoulliGenerator;
 import com.solovev.util.Filter;
 
 import java.lang.reflect.Array;
-import java.math.RoundingMode;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public class Main {
 
@@ -39,7 +41,7 @@ public class Main {
 
     public static void main(String[] args) {
         Integer[] arrInt = {-1, -2, -3, -4, -5, -5, 0, 1, 1, 2, 3, 4, 5};
-        Double[] arrDouble = {-Math.PI, -Math.E, -1.0, -0.5, 0.0, 1.0, 1.0/6 , 1.1, 2.2, 3.0, 4.0};
+        Double[] arrDouble = {-Math.PI, -Math.E, -1.0, 0.5, 0.0, 1.0, 1.0 / 6, 1.1, -691.0 / 2730, 2.2, -1.0 / 30, 4.0, 1.0 / 42, 7.0 / 6};
 
         //Test 1a
 //        print(filter(arrInt, new FilterOnlyPositive()));
@@ -60,11 +62,30 @@ public class Main {
         //Test2
         //bernoulli tests
         int scale = 10;
-        System.out.println(BernoulliGenerator.numberList(0,scale));
-        System.out.println(BernoulliGenerator.numberList(1,scale));
-        System.out.println(BernoulliGenerator.numberList(3,scale));
-        System.out.println(BernoulliGenerator.numberList(4,scale));
-        System.out.println(BernoulliGenerator.numberList(5,scale));
+        int startIndex = 0;
+        int finishIndex = 20;
+        List<BigDecimal> bernoulliList = BernoulliGenerator.numberList(startIndex, finishIndex, scale);
 
+        //the minimum difference for values to be considered equal
+        BigDecimal precise = BigDecimal.valueOf(0.00001);
+        //finding function
+        BiFunction<Number, List<BigDecimal>, Boolean> find = (i, list) ->
+        {
+            BigDecimal value = BigDecimal.valueOf(i.doubleValue());
+            for (BigDecimal bd : list) {
+                if (bd.subtract(value).abs().compareTo(precise) < 0) {
+                    return true;
+                }
+            }
+            return false;
+        };
+
+        //for integer
+        print(filter(arrInt, i ->
+                find.apply(i, bernoulliList)));
+        //for double
+        print(filter(arrDouble, i ->
+                find.apply(i, bernoulliList)));
     }
+
 }
