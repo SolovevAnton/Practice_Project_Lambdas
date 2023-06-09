@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -42,11 +43,14 @@ public class Main {
     public static void main(String[] args) {
         Integer[] arrInt = {-1, -2, -3, -4, -5, -5, 0, 1, 1, 2, 3, 4, 5};
         Double[] arrDouble = {-Math.PI, -Math.E, -1.0, 0.5, 0.0, 1.0, 1.0 / 6, 1.1, -691.0 / 2730, 2.2, -1.0 / 30, 4.0, 1.0 / 42, 7.0 / 6};
+        String[] arrString = {"","Hi!","My name is"," ","abcd","XYZ"};
+
+
+        Scanner scan = new Scanner(System.in);
 
         //Test 1a
 //        print(filter(arrInt, new FilterOnlyPositive()));
         //Test 1b
-//        Scanner scan = new Scanner(System.in);
 //        System.out.print("Input integer: ");
 //        int number = scan.nextInt();
 //        Filter<Integer> matchInput = new Filter<>() {
@@ -86,6 +90,25 @@ public class Main {
         //for double
         print(filter(arrDouble, i ->
                 find.apply(i, bernoulliList)));
+
+        //Test3
+        System.out.print("Input integer: ");
+        int length = scan.nextInt();
+        //3a
+        print(filter(arrString, new Filter<String>(){
+            @Override
+            public boolean apply(String elem) {
+                return elem.length() > length;
+            }
+        }));
+        Filter<String> isLexSort = (str) -> {
+           char[] stringToSort = str.toCharArray();
+            Arrays.sort(stringToSort);
+            return String.valueOf(stringToSort).equals(str);
+        };
+        //3b
+        print(filter(arrString,isLexSort));
     }
+
 
 }
