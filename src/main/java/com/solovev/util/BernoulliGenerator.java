@@ -9,7 +9,8 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
-public class BernoulliGenerator {
+public class BernoulliGenerator implements  Detector {
+    int testField;
 
     /**
      * Method returns list of bernoulli numbers from 0 to finish index. B0 = 1;
@@ -52,7 +53,6 @@ public class BernoulliGenerator {
             return BigDecimal.ONE.subtract(sum);
         };
 
-        //TODO refactor fill list
         IntStream
                 .rangeClosed(0, finishIndex)
                 .forEach(i -> resultList.add(bernoulliNumber.apply(i)));
@@ -98,5 +98,25 @@ public class BernoulliGenerator {
             result = result.multiply(counter);
         }
         return result;
+    }
+
+    @Override
+    public boolean detect() {
+        return BernoulliGenerator.class.getDeclaredFields().length > 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        BernoulliGenerator that = (BernoulliGenerator) o;
+
+        return testField == that.testField;
+    }
+
+    @Override
+    public int hashCode() {
+        return testField;
     }
 }
