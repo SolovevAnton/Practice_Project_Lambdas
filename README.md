@@ -1,5 +1,5 @@
 # Practice_Project_Lambdas
-Project with functional interfaces, and bernoulli nmbers calculation
+Project with functional interfaces, and bernoulli numbers calculation
  Interface Tasks
 
 This repository contains the implementation of several interface tasks in Java, showcasing my skills as a Java backend developer. The tasks involve working with interfaces, lambda expressions, anonymous inner classes, and more.
